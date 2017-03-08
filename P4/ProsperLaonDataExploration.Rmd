@@ -7,6 +7,14 @@ Exploratory Data Analysis
 #Dataset
 [Prosper Loan data](https://docs.google.com/document/d/1qEcwltBMlRYZT-l699-71TzInWfk4W9q5rTCSvDVMpc/pub?embedded=true) provided by Udacity
 
+This data set contains 113,937 loans with 81 variables on each loan, including loan amount, borrower rate (or interest rate), current loan status, borrower income, borrower employment status, borrower credit history, and the latest payment information.
+
+
+#Introduction
+This dataset contains loan information. I have a bleak background in the domain and I believe that this might be good, in the sense I would learn more and bad, in the sense my lack of knowledge in domain could hinder my findings.
+
+As part of the Exploratory Data Analysis of this dataset, I would like to explore many dependencies between various variables. My intuition is that there are many unsaid correlations between the variables which can only be found out by exploration. Let us first load the dataset and find the various variables.
+
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
@@ -44,44 +52,40 @@ sprintf("No of features: %s", ncol(ProsperLoanData))
 names(ProsperLoanData)
 str(ProsperLoanData)
 ```
-
-
-Some variables need factorization as per their levels.
-```{r echo=FALSE}
-#factorizing rating as these are the key variable we'd investigate throughout the dataset
-ProsperLoanData$ProsperRating.alpha = factor(ProsperLoanData$ProsperRating..Alpha.,
-                                 levels = c("AA","A","B","C","D","E","HR","NA"))
-ProsperLoanData$ProsperRating <-factor(ProsperLoanData$ProsperRating..Alpha,
-                        levels = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR', 'NA'))
-ProsperLoanData$ProsperScore = factor(ProsperLoanData$ProsperScore)
-```
-
+Now that we have seen the variables, I would like to plot some variable one by one to see what insights they can give.
 
 # Univariate Plots Section
+Firstly I feel Prosper rating is the most important variable. Rating has levels(factor) and it seems score is a range. I want to know how many number of loans customers take with respecting rating levels.
 ```{r echo=FALSE, Univariate_Plots}
 #1. Prosper Rating Distribution
-ggplot(data = ProsperLoanData, aes(ProsperRating.alpha)) +
-  geom_bar(aes(fill = ProsperRating.alpha)) +
+ggplot(data = ProsperLoanData, aes(ProsperRating..Alpha.)) +
+  geom_bar(aes(fill = ProsperRating..Alpha.)) +
   ggtitle('Numbers of Loans by Prosper Rating') +
   xlab('Rating') +
   ylab('Number of Loans')
 ```
-
-As you can notice from the plot provided summary, majority of loans are non classified, and among the classified ones 'C' is the majority rating.
+This bar chart has some insights on most popular rating. As one can notice from the plots, majority of loans are non classified('NA'), and among the classified ones, 'C' is the most rated and 'AA' is least. Let me check the same using the table command in R, if it aligns with my data (if my plot is correct :P).
 ```{r echo=FALSE}
-table(ProsperLoanData$ProsperRating.alpha)
+table(ProsperLoanData$ProsperRating..Alpha.)
 ```
 
-```{r echo=FALSE,Prosper_Score_Distribution }
+Let me now explore the Prosper Score Variable. What is the maximum, average score?
+```{r echo=FALSE,Prosper_Score_Distribution}
 #2. Prosper Score Distribution
 ggplot(data = ProsperLoanData, aes(x = ProsperScore)) + 
         geom_bar(color = "black", fill = '#0056E5') +
         theme(axis.text.x = element_text(angle = 2, vjust = 0.5)) +
         xlab("Score") + ggtitle("ProsperScore Distribution")
-table(ProsperLoanData$ProsperScore)
 ```
+This is another rating method. As per the plot, among the scores, mojority is concentrated in 4-8 score. Let me verify the same using summary of this variable.
 
-Here we see another rating method. And again most of the loans are in NA score(not rated). Among the ratings mojority is concentrated in 4-8 score.
+```{r}
+table(ProsperLoanData$ProsperScore)
+summary(ProsperLoanData$ProsperScore)
+```
+As we can see the 1st and 3rd quartile are 4 and 8 respectively. Mean and median are close to 6. So I can conclude on an average loans are given 6 score. Note there are many non classified loans. 
+
+Now I would want to know how is the Loan Status variable distributed. A status can tell how many loans are completed, current, pending or defaulted. This might tell us the status of customers loan status patterns. I back the plot with numeric count of each variable.
 
 ```{r echo=FALSE,Loan_Status_Distribution }
 #3. Loan Status Distribution
@@ -92,8 +96,9 @@ ggplot(data = ProsperLoanData, aes(x = LoanStatus)) +
 table(ProsperLoanData$LoanStatus)
 ```
 
-This is the distrubution status of loans. As expected most of loans are running in Current status. And another larger portion is completed.
+This is the distrubution status of loans. As expected most of loans are running in Current status. And another larger portion is completed. No interesting findings though. :(
 
+How about knowing the employment status of people taking loans. Im curious to know, which set of people take more loans!
 ```{r echo=FALSE,EmploymentStatus_Distribution }
 #4. EmploymentStatus Distribution
 ggplot(data = ProsperLoanData, aes(x = EmploymentStatus)) + 
@@ -102,9 +107,11 @@ ggplot(data = ProsperLoanData, aes(x = EmploymentStatus)) +
         xlab("Score") + ggtitle("EmploymentStatus Distribution")
 table(ProsperLoanData$EmploymentStatus)
 ```
+Most of the loan takers are employed or fulltime working people. Very few non Employed people take loans. Well if my knowledge is correct, I think loans are granted on the basis of employment status of a person, wheather a person will be able to give back the loan or not. And I think this could be the reason for such a distribution. 
 
-Most of the loan takers are employed or fulltime working people.
+Let me try and explore the income ranges of people. Can income range of loan takers tell me somethings? Are there some specific income ranges which are targetted for loans?
 
+But before plotting I would like to factor the variable for better distribution.
 ```{r echo=FALSE, Income_Range}
 #5. Income Range Distribution
 #We need to factorise the values first
@@ -122,9 +129,9 @@ ggplot(data = ProsperLoanData, aes(IncomeRange)) +
   ylab('Count')
 summary(ProsperLoanData$IncomeRange)
 ```
-.
-Notice the  borrower income range plot. Medium income range people are more loan takers, with most of concentration in the people with income range $25000-$75000. These could be customers which are targetted for home loans, car loans, etc.
+Notice the  borrower income range plot. Medium income range people are more loan takers, with most of concentration in the people with income range $25000-$75000. These could be customers which are targetted for home loans, car loans, etc. as middle income range people (middle class) are people who would want to buy house or car but cannot afford the full payment. Loan comes as a saviour for these.
 
+But Do people state their true income in the forms? How is stated income varied?
 ```{r echo=FALSE, Stated_Monthly_Income}
 ##5.2. Stated Monthly Income
 ggplot(aes(x = StatedMonthlyIncome), data = ProsperLoanData) +
@@ -138,10 +145,9 @@ ggplot(aes(x = StatedMonthlyIncome), data = ProsperLoanData) +
 
 summary(ProsperLoanData$StatedMonthlyIncome)
 ```
+I find median stated income range is at $4667 and mean of $5608 which is quite average for a professional with few years of experience. Peak of loan takers lie in the $3000-$6000 range.
 
-Notice that median stated income range is at $4667 and mean of $5608 which is quite average for a professional with few years of experience. 
-
-
+Now I would like to know how much loan does a loan taker takes based on its income, i.e. how is DebtToIncomeRatio varied?
 ```{r echo=FALSE, Debt_to_Income_Ratio}
 ##6. Debt to Income Ratio
 ggplot(data = ProsperLoanData, aes(x = DebtToIncomeRatio)) +                
@@ -154,7 +160,7 @@ summary(ProsperLoanData$DebtToIncomeRatio)
 ```
 The data has a long-tailed right-skewed but as expected. It's expected the majority of people in U.S have a credit history, and the ratio should be low enough for a secured repayment. Seems like 25% is the threshold for most borrower.
 
-Let us try to find out the data's timeline distribution.
+Now I would like to know more about the Prosper loan company. How did Prosper loan do through-out these years? This can be taken from the number of loans people took over the years. Let us try to find out the data's timeline distribution.
 ```{r echo=FALSE, message=FALSE,  fig.height=8, warning=FALSE, Loan_by_Year}
 #7. Set Loan Orignal Date in Year-Month-Date format
 ProsperLoanData$LoanOriginationDate <- as.POSIXct(ProsperLoanData$LoanOriginationDate,
@@ -171,10 +177,9 @@ ggplot(ProsperLoanData, aes(as.factor(LoanOriginationDate.year))) +
 
 table(ProsperLoanData$LoanOriginationDate.year)
 ```
+As per the plot, we can see that the data is provided for the year 2005-2014. Most of the loans were originated in the year 2013. Notice there is very less loans in the year 2009. This could be due the market downfall in the year 2008 due the Global Financial Crisis. One can notice the rise in the number of loans post that year. It seems that although 2009 wasnt a good year, Prosper loan did do a great job in making a comeback and covering up for the loss! Interesting!
 
-The data is provided for the year 2005-2014. Most of the loans were originated in the year 2013. Notice there is very less loans in the year 2009. This could be due the market downfall in the year du 2008 Global Financial Crisis. 
-
-
+Coming back to the loan takers. I would want to know what made people take the loans? What was their purpose? Since ListingCategory is not factorized properly, I first create the factors and then update the variable.
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8, Borrower_Purpose}
 ##8. Borrower's Purpose of Loan 
 x <- c('Debt Consolidation', 
@@ -206,9 +211,9 @@ ggplot(data = ProsperLoanData, aes(ListingCategory)) +
   ylab('Number of loans')
 summary(ProsperLoanData$ListingCategory)
 ```
+We notice that not many people wants to provide the purpose of loan listing. There’s a surprisingly amount of needs for debt consolidation. My intuition is that as young people are going out to the real world and start to repay their student debt, purchase cars, mortgage their apartment, etc. This is not true people who are settled.
 
-We notice that not many people wants provide the purpose of loan listing. There’s a surprisingly amount of needs for debt consolidation. My intuition is that as young people are going out to the real world and start to repay their student debt, purchase cars, mortgage their apartment, etc. This is not true people who are settled.
-
+Now that I know the purpose, What is the amount of loan which loan takers wants to take?
 ```{r echo=FALSE, Loan_by_Amount}
 ## 9. Number of Loan Split by Amount
 ggplot(ProsperLoanData, aes(LoanOriginalAmount)) + 
@@ -223,9 +228,9 @@ ggplot(ProsperLoanData, aes(LoanOriginalAmount)) +
 summary(ProsperLoanData$LoanOriginalAmount)
 boxplot(ProsperLoanData$LoanOriginalAmount, main=toupper("Box plot showing the summary of Loan Original Amount"), font.main=1, cex.main=0.7, xlab="Prosper Loan Data", ylab="Loan Original Amount", col="darkgreen")
 ```
+This histogram is really interesting! There is peaks at $5000, $10000, $15000, $20000. This tells that people tend to take loans in round off amounts in multiples of $5000. As we can see that minimum loan amount was for $1000, and maximum loan amount was for $35000. 
 
-As we can see that minimum loan amount was for $1000, and maximum loan amount was for $35000. Interestingly, there is peaks at $5000, $10000, $15000, $20000. This tells that people tend to take loans in round off amounts in multiples of $5000.
-
+Its' interesting to know the range of borrower's rate. Borrower rate changes as per the term, let me explore this.
 ```{r echo=FALSE, Borrower_Rate}
 ## 10. Borrower's Rate
 ggplot(data = ProsperLoanData, aes(x = BorrowerRate)) + 
@@ -234,9 +239,9 @@ ggplot(data = ProsperLoanData, aes(x = BorrowerRate)) +
         ggtitle("Borrower Rate") 
 summary(ProsperLoanData$BorrowerRate)
 ```
+I'd suspect they have different borrower rate for different term & rating but here we get a median of 18.4%. However, there is a huge notable spike around 31%. I wonder what could be the reason.
 
-Its' interesting to know the range of borrower's rate. I'd suspect they have different borrower rate for different term & rating but here we get a median of 18.4%. However, there is a huge notable spike around 31%, which is a very attractive rate for the investors.
-
+Prosper data is US based firm. Is there any specific region/state where more or less loans are taken? Lets explore BorrowerState distribution to answer that.
 ```{r echo=FALSE, Borrower_State}
 ## 11. Borrower_State
 ggplot(data = ProsperLoanData, aes(x = BorrowerState)) + 
@@ -248,8 +253,10 @@ table(ProsperLoanData$BorrowerState)
 ```
 Highest no of Loans were dispersed for borrowers from state of CA with a count of 14,717. and least were from ND with a count of 30.
 
-####  Now lets have a look from Investors Prespective
+I find this dataset divided into two categories: one from borrower's perspective and one from Investors. Some variables tell information about the borrower and some about investor. 
 
+####  Now lets have a look from Investors Prespective
+I would like to explore the variable Lender's yeild first. Is it related to borrower information in any sense?  
 ```{r echo=FALSE, Lender_Yield}
 ## 12. Investor perspective - Lender Yield
 ggplot(aes(x=LenderYield), data=ProsperLoanData) + 
@@ -258,9 +265,9 @@ ggplot(aes(x=LenderYield), data=ProsperLoanData) +
     ggtitle("The Lender Yield on the Loan")
 summary(ProsperLoanData$LenderYield)
 ```
-
 Interestingly, noticing the peak in 0.31, there seems to be a direct relationship between Borrower's rate(from previous plot) and Lenders' yeild.
 
+What is the term of loan taking?
 ```{r echo=FALSE, message=FALSE, warning=FALSE, LoanOriginalAmount_Term1}
 ## 13. Investor Profile - LoanOriginal Amount ~ Term Histogram
 table(ProsperLoanData$Term)
@@ -270,10 +277,9 @@ ggplot(data = ProsperLoanData, aes(x = Term)) +
         ylab("Loan Count") +
         ggtitle("Borrower Rate") 
 ```
-We notice that most of the loan are taken for a term of 36 months.
+There are three terms 12, 36, 60 months(no of years 1,3,5). We notice that most of the loan are taken for a term of 36 months.
 
 # Univariate Analysis
-
 ### What is the structure of your dataset?
 The dataset is comprised of 81(original) variables with 113937 observations. Variables are of classes int, numeric, date, and factor. The dataset includes the loans provided from year 2005-2014. Although 81 variables seems to be too many at first, but on second look at the data, we notice that these variables can be seen as 2 main players: the “Borrowers” variables & “Investors” variables.
 
@@ -292,23 +298,25 @@ No. So far, I havent created any new variables, although I have created factoriz
 Yes, there is few unsual distribution. There is high spike in lender yield & borrower rate and the spike in LoanOriginalAmount that people tend to buy in bulk. We also notice that most of the loans were taken for a period of 36 months. Although I am unable to conclude on why this could be happeneing. 
 For tidying up the data I converted some of the variables to its factors, simply to better visualize them into categorical forms.
 
-# Bivariate Plots Section
 
+
+Now that I have explored some individual variables, I would like to know their relationships with each other. We start with the Bivariate plot section next.
+# Bivariate Plots Section
+My intuition is that there is relation between BorrowerRate and ProsperRatings. Let me check the same. I want to see borrower rates' distribuition for each of the ratings. First I would want to factorise alpha variable.
 ```{r echo=FALSE,  Borrower_Rate_Prosper_Rating}
 ## 14.Prosper Data - BorrowerRate - Prosper Rating
-ProsperLoanData$ProsperRating.alpha <- factor(ProsperLoanData$ProsperRating.alpha)
+ProsperLoanData$ProsperRating.alpha <- factor(ProsperLoanData$ProsperRating..Alpha.)
 ggplot(data = ProsperLoanData, aes(x = ProsperRating.alpha, y = BorrowerRate)) +
         geom_boxplot() +
         xlab("Prosper Rating") +
         ggtitle("Borrower Rate for Different Prosper Rating")
 ```
+Ignoring the non classified loan ratings, We notice that there is direct linear relationship between the prosper rating and borrowers rate. As the rating moves from one level to another, the borrowers median rating increases. 'A' rating is an exception.
 
-Ignoring the non classified loan ratings, We notice that there is direct linear relationship between the prosper rating and borrowers rate. As the rating moves from one level to another, the borrowers median rating also increases.
-
-
+Next I would want to know about what is the yearly income for different ratings?
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Yearly_Income_And_Prosper_Rating}
 ## 14. Borrower Profile - Yearly Income ~ Prosper Rating Categorial
-ggplot(aes(y = StatedMonthlyIncome *12 , x =ProsperRating.alpha ), 
+ggplot(aes(y = StatedMonthlyIncome *12 , x =ProsperRating.alpha), 
        data = ProsperLoanData) +
       geom_boxplot(aes(fill = ProsperRating..numeric.)) +
       xlab("Prosper Rating") +
@@ -316,7 +324,6 @@ ggplot(aes(y = StatedMonthlyIncome *12 , x =ProsperRating.alpha ),
       ggtitle("Yearly Income for Different Prosper Rating")
 summary(ProsperLoanData$StatedMonthlyIncome*12)
 ```
-
 The above plot seems little unclear due to many outliers. I would like to rebuild this plot on a subset of data.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Yearly_Income_And_Prosper_Rating2}
@@ -329,15 +336,15 @@ ggplot(aes(y = StatedMonthlyIncome *12 , x =ProsperRating.alpha ),
       ylab("Yearly Income") +
       ggtitle("Yearly Income for Different Prosper Rating")
 ```
+This is much better. The above plot helps us in understanding that yearly income is related to proper Rating. Rating decrases for low income levels. Again 'A' rating is an exception.
 
-The above plot helps us in understanding that yearly income is related to proper Rating.
-
-Lets see the Correlation between DebtToIncomeRatio and BorrowerRate:
+Next I would like to see the Correlation between DebtToIncomeRatio and BorrowerRate:
 ```{r ,Correlation}
 cor(ProsperLoanData$DebtToIncomeRatio, ProsperLoanData$BorrowerRate, use = 'complete.obs')
 ```
-The relationship is not that significant when we do a correlation test.
+:( The relationship is not that significant when we do a correlation test.
 
+Is there any relation between EmploymentStatus and Loan Amount?
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Employment_Status_Loan_OriginalAmount}
 ## 16. Borrower Profile - Employment Status ~ LoanOriginalAmount
 ggplot(aes(x = EmploymentStatus, y = LoanOriginalAmount), data = na.omit(ProsperLoanData)) +
@@ -345,9 +352,9 @@ ggplot(aes(x = EmploymentStatus, y = LoanOriginalAmount), data = na.omit(Prosper
                         scale_y_continuous(limits = c(0,15000)) +
                         theme(axis.text.x = element_text(angle = 0, hjust = 0.5))
 ```
-
 Strangely though retired category seems to have higher loan original amount than part-time. In fact part-time employed have the lowest Loan original amount. I am unable to find out the scenario for why this happened. My guess is that may be retired people would need loan for medical expenses, or any other financial needs etc.
 
+Is there any relation between BorrowerRate and Region(BorrowerState)?
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Yearly_Income_And_Prosper_Rating3}
 ## 17. Borrower Profile - Borrowers State ~ Borrowers Rate
 ggplot(aes(y = BorrowerRate , x = BorrowerState), 
@@ -360,6 +367,7 @@ ggplot(aes(y = BorrowerRate , x = BorrowerState),
 ```
 Not such an interesting plot for now.
 
+Lets now explore Investors' variables. Just like Borrower Rate and Prosper Rating, is there any relation between Lender Yield and Rating?
 ```{r echo=FALSE, message=FALSE, warning=FALSE, LenderYield_Rating}
 ## 18. Investor profile - Lender Yield vs Rating 
 ProsperLoanData$ProsperRating.alpha = factor(ProsperLoanData$ProsperRating..Alpha.,
@@ -369,9 +377,10 @@ ggplot(data = na.omit(ProsperLoanData), aes(x = ProsperRating.alpha, y = LenderY
         xlab("Prosper Rating") +
         ggtitle("Yield for Different Prosper Rating")
 ```
+The plot is as expected, As ratings go down Lender's yield increases.
 
-The plot is as expected, nothing interesting to notice here.
 
+Earlier I explored, that loans are taking in the multiples of $5000 and also in term of 12, 36 or 60 months. Now Im curious if they have a relation.
 ```{r echo=FALSE, message=FALSE, warning=FALSE, LoanOriginalAmount_Term2}
 ## 19. Investor Profile - LoanOriginal Amount ~ Term Boxplot
 ggplot(aes(y = LoanOriginalAmount, x = factor(Term)), data = ProsperLoanData) +
@@ -379,12 +388,9 @@ ggplot(aes(y = LoanOriginalAmount, x = factor(Term)), data = ProsperLoanData) +
           scale_y_continuous(
     limits = c(0, quantile(ProsperLoanData$LoanOriginalAmount, 0.99, na.rm = TRUE)))
 ```
-
-This chart is a new interesting insight, although the majority of loan are in 36-month term. The Loan original amount is significantly higher for 60 months term. Let's see if it's hold true for Lender Yield.
-
+This chart is a new interesting insight, although the majority of loan are in 36-month term. The Loan original amount is significantly higher for 60 months term.
 
 # Bivariate Analysis
-
 ### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
 I wanted to Borrower and Investors patterns; and variable which related to them. So far, the only relationship I found is through the proprietory Prosper Scoring system. Other factor I was trying to compare was not having any particular relationship.
 
@@ -394,8 +400,10 @@ Well, all plots were as expected, so nothing very interesting. One thing was tha
 ### What was the strongest relationship you found?
 The relationship between (Prosper Rating and Lender Yield) and (Prosper Rating and Borrower Rate) has an inversed relationship. The higher the rating, the lower the borrower rate and lender yield.
 
-# Multivariate Plots Section
+Now that we have explored the binary relations, I would like to explore if there are any multivariate raltions as next.
 
+# Multivariate Plots Section
+I feel prosper rating has a relation with DebtToIncomeRatio. Also What happens if we include the parameter of LenderYield. I would like to make a scatter plot here.
 ```{r echo=FALSE, Multivariate_Plots1}
 ## 20. Debt To Income Ratio - Prosper Rating - Lender Yield
 ggplot(aes(x= DebtToIncomeRatio, y=LenderYield, color=ProsperRating.alpha), 
@@ -410,9 +418,9 @@ ggplot(aes(x= DebtToIncomeRatio, y=LenderYield, color=ProsperRating.alpha),
     ylab ("Lender Yield") +
     scale_fill_discrete(name = "Prosper Rating")
 ```
+Here is how we take a closer look at Lender Yield vs Prosper Rating and how Prosper Rating was influced by Debt to Income Ratio. This plot tells about the relationship between Prosper rating and lenders yield. The higher the risk, the lower the rating, the better the lender yield. We also noticed high rank like AA would not have DebtToIncome ratio more than 25% and although most borrowers have lower DebtToIncome Ratio, there're still high DebtToIncome ratio borrowers and fall in lower ProsperRating. Therefore, the shape is upward triangular. Quite Intriguing!
 
-Here is how we take a closer look at Lender Yield vs Prosper Rating and how Prosper Rating was influced by Debt to Income Ratio.
-
+Now I want to know if there is specific term where lender's Yield is more or less!
 ```{r echo=FALSE, fig.width = 12, fig.height = 10,LenderYield_ProsperRate_Term}
 ## 21. Lender Yield vs Prosper Rate vs Term
 plot1 <- ggplot(aes(x= ProsperRating.alpha, y=LenderYield, 
@@ -437,9 +445,9 @@ plot2 <- ggplot(aes(x= ProsperRating.alpha, y= LenderYield ),
 
 grid.arrange(plot1, plot2, ncol=1, nrow =2)
 ```
+This is a closer look for lender yield vs prosper rating divided by Term variable. The majority of loans opt-in for 36-month term and the return for 36-month and 60-month are just higher than 12-month, also considering the fact there're less loan in 12-month term than other term.
 
-This is a closer look for lender yield vs prosper rating. The majority of loans opt-in for 36-month term and the return for 36-month and 60-month are just higher than 12-month, also considering the fact there're less loan in 12-month term than other term.
-
+Now is there some similar relation with Borrower's data?
 ```{r echo=FALSE, Multivariate_Plots2}
 ## 22. Borrower Rate vs Year vs Prosper Rating
 plot11 <- ggplot(aes(x= ProsperRating.alpha, y= BorrowerRate), 
@@ -458,11 +466,9 @@ plot22 <- ggplot(aes(x= ProsperRating.alpha, y= BorrowerRate, color=ProsperRatin
 
 grid.arrange(plot11, plot22, ncol=1, nrow =2)
 ```
-
 Prosper must have optimized their model throughout the year and as we see the borrower throughout the year, the variation between borrower rate is not that significant anymore and we tend to have smaller standard deviation year-over-year. Something worth noticing is the amount of borrowing suddenly decreased in 2013.
 
 # Multivariate Analysis
-
 ### Talk about some of the relationships you observed in this part of the investigation. Were there features that strengthened each other in terms of looking at your feature(s) of interest?
 Term loan is quite a good indicator whether we have a better Lender Yield or not. Also, we see how three variables Lender Yield, Prosper Rating and Debt To Income Ratio come together and how it affect each order. 
 
@@ -470,13 +476,13 @@ Term loan is quite a good indicator whether we have a better Lender Yield or not
 There seems to be a fixed borrower rate in criteria HR and AA. This indicates that the criteria for eligibility of AA and HR must be strict.
 
 ### OPTIONAL: Did you create any models with your dataset? Discuss the strengths and limitations of your model.
-
 I did not create any specific models from dataset.
 
+
 # Final Plots and Summary
+Here I put the most interesting findings of my dataset. 
 
 ### Plot One: 
-
 ```{r echo=FALSE, fig.width = 12, fig.height = 8, Plot_One}
 ggplot(aes(x= DebtToIncomeRatio, y=LenderYield, color=ProsperRating.alpha), 
     data=na.omit(filter(ProsperLoanData, DebtToIncomeRatio < 1))) +
@@ -495,7 +501,6 @@ ggplot(aes(x= DebtToIncomeRatio, y=LenderYield, color=ProsperRating.alpha),
 One of the most intriguing plot for me. As this tells about the relationship between Prosper rating and lenders yield. The higher the risk, the lower the rating, the better the lender yield. We also noticed high rank like AA would not have DebtToIncome ratio more than 25% and although most borrowers have lower DebtToIncome Ratio, there're still high DebtToIncome ratio borrowers and fall in lower ProsperRating. Therefore, the shape is upward triangular.
 
 ### Plot Two
-
 ```{r echo=FALSE, fig.width = 12, fig.height = 8,Plot_Two}
 ## 6. Number of Loans split by Year
 ggplot(ProsperLoanData, aes(as.factor(LoanOriginationDate.year))) +
@@ -507,11 +512,9 @@ table(ProsperLoanData$LoanOriginationDate.year)
 ```
 
 ### Description Two
-
 This graph shows how the downfall of business in the year 2009 mainly due to the dot com burst (or the recession) that happened around this time . Once the companies started to stabilize they eventually started to improve over the subsequent years as it can be seen from the graph .
 
 ### Plot Three
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width = 12, fig.height = 8, Plot_Three}
 ## 
 ggplot(data = ProsperLoanData, aes(ListingCategory)) +
@@ -527,7 +530,6 @@ summary(ProsperLoanData$ListingCategory)
 Most of loans' purposes were undeclared. And more than 50% of loans were for Debt Consolidation. We notice that this could be for the probable young customers who start their employment journey by taking home loans, car loans, etc. and hence my guess is an older or settled generation would not be in this category.
 
 # Reflection
-
 This dataset seemed to be quite long and not so interesting. I was unable to make much conclusions as their were limited correlation between variables. My limited knowledge in the domain also seem to be affecting my report on insights. I tried to cover the major features in the dataset which I felt required attention. Other Features seemed redundant of not so interesting to me right now. 
 
 I focussed my attention on dataset in two prespectives: borrowers and investor. I found some relations between the rates and yields which was very new for me. I also was able to conclude some insights on the purpose of people taking loans. 
