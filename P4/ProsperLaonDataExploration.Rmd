@@ -11,15 +11,15 @@ This data set contains 113,937 loans with 81 variables on each loan, including l
 
 
 #Introduction
-This dataset contains loan information. I have a bleak background in the domain and I believe that this might be good, in the sense I would learn more and bad, in the sense my lack of knowledge in domain could hinder my findings.
+This dataset contains loan information. I have a bleak background in the domain. I believe that this might be good, in the sense I would learn more. Also bad, in the sense my lack of knowledge in domain could hinder my findings.
 
-As part of the Exploratory Data Analysis of this dataset, I would like to explore many dependencies between various variables. My intuition is that there are many unsaid correlations between the variables which can only be found out by exploration. Let us first load the dataset and find the various variables.
+As part of the Exploratory Data Analysis of this dataset, I would like to explore many dependencies between various variables. My intuition is that there are many unsaid correlations between the variables. This can only be found out by exploration. Let us first load the dataset and find the various variables.
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE,fig.width=10)
 ```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+```{r packages}
 # Load all of the packages that you end up using
 # in your analysis in this code chunk.
 
@@ -39,24 +39,24 @@ library(GGally)
 ```
 
 
-```{r echo=FALSE, Load_the_Data}
+```{r , Load_the_Data}
 # Load the Data
 ProsperLoanData = read.csv("prosperLoanData.csv")
 ```
 
 #Exploring the dataset
 Here we explore the dataset as follows
-```{r echo=FALSE, ProsperLoanData}
+```{r , ProsperLoanData}
 sprintf("No of data points: %s", nrow(ProsperLoanData))
 sprintf("No of features: %s", ncol(ProsperLoanData))
 names(ProsperLoanData)
 str(ProsperLoanData)
 ```
-Now that we have seen the variables, I would like to plot some variable one by one to see what insights they can give.
+Now that we have seen the variables, I would like to plot some variable one by one. This is to see what insights they can give.
 
 # Univariate Plots Section
 Firstly I feel Prosper rating is the most important variable. Rating has levels(factor) and it seems score is a range. I want to know how many number of loans customers take with respecting rating levels.
-```{r echo=FALSE, Univariate_Plots}
+```{r , Univariate_Plots}
 #1. Prosper Rating Distribution
 ggplot(data = ProsperLoanData, aes(ProsperRating..Alpha.)) +
   geom_bar(aes(fill = ProsperRating..Alpha.)) +
@@ -64,7 +64,7 @@ ggplot(data = ProsperLoanData, aes(ProsperRating..Alpha.)) +
   xlab('Rating') +
   ylab('Number of Loans')
 ```
-This bar chart has some insights on most popular rating. As one can notice from the plots, majority of loans are non classified('NA'), and among the classified ones, 'C' is the most rated and 'AA' is least. Let me check the same using the table command in R, if it aligns with my data (if my plot is correct :P).
+This bar chart has some insights on most popular rating. As one can notice from the plots, majority of loans are non classified('NA'). Among the classified ones, 'C' is the most rated and 'AA' is least. Let me check the same using the table command in R, if it aligns with my data (if my plot is correct :P).
 ```{r echo=FALSE}
 table(ProsperLoanData$ProsperRating..Alpha.)
 ```
@@ -107,7 +107,7 @@ ggplot(data = ProsperLoanData, aes(x = EmploymentStatus)) +
         xlab("Score") + ggtitle("EmploymentStatus Distribution")
 table(ProsperLoanData$EmploymentStatus)
 ```
-Most of the loan takers are employed or fulltime working people. Very few non Employed people take loans. Well if my knowledge is correct, I think loans are granted on the basis of employment status of a person, wheather a person will be able to give back the loan or not. And I think this could be the reason for such a distribution. 
+Most of the loan takers are employed or fulltime working people. Very few non Employed people take loans. As per my knowledge, I think loans are granted on the basis of employment status of a person. That is, wheather a person will be able to give back the loan or not. And I think this could be the reason for such a distribution. 
 
 Let me try and explore the income ranges of people. Can income range of loan takers tell me somethings? Are there some specific income ranges which are targetted for loans?
 
@@ -129,7 +129,7 @@ ggplot(data = ProsperLoanData, aes(IncomeRange)) +
   ylab('Count')
 summary(ProsperLoanData$IncomeRange)
 ```
-Notice the  borrower income range plot. Medium income range people are more loan takers, with most of concentration in the people with income range $25000-$75000. These could be customers which are targetted for home loans, car loans, etc. as middle income range people (middle class) are people who would want to buy house or car but cannot afford the full payment. Loan comes as a saviour for these.
+Notice the  borrower income range plot. Medium income range people are more loan takers, with most of concentration in the people with income range $25000-$75000. These could be customers which are targetted for home loans, car loans, etc. One reason is that middle income range people (middle class) are people who would want to buy house or car but cannot afford the full payment. Loan comes as a saviour for these.
 
 But Do people state their true income in the forms? How is stated income varied?
 ```{r echo=FALSE, Stated_Monthly_Income}
@@ -211,7 +211,7 @@ ggplot(data = ProsperLoanData, aes(ListingCategory)) +
   ylab('Number of loans')
 summary(ProsperLoanData$ListingCategory)
 ```
-We notice that not many people wants to provide the purpose of loan listing. There’s a surprisingly amount of needs for debt consolidation. My intuition is that as young people are going out to the real world and start to repay their student debt, purchase cars, mortgage their apartment, etc. This is not true people who are settled.
+We notice that not many people wants to provide the purpose of loan listing. There’s a surprisingly amount of needs for debt consolidation. My intuition is that as young people are going out to the real world, they start to repay their student debt, purchase cars, mortgage their apartment, etc. This is not true people who are settled.
 
 Now that I know the purpose, What is the amount of loan which loan takers wants to take?
 ```{r echo=FALSE, Loan_by_Amount}
