@@ -1,5 +1,9 @@
+#Data Visualization Project
+
+by Ankita Mehta, Data Analyst Nanodegree
+
 #Summary:
-- in no more than 4 sentences, briefly introduce your data visualization and add any context that can help readers understand it
+- Using the Baseball Data (https://s3.amazonaws.com/udacity-hosted-downloads/ud507/baseball_data.csv) , I want to effectively create a visualization that shows differences among the performance of the baseball players.
 
 
 #Design 
