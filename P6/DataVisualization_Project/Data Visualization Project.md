@@ -17,7 +17,7 @@ Since this was a time series data, I opted for line and bar graph. I decided to 
 
 ### Hand Sketch
 The initial design was as follows:
-![Hand Sketch](https://github.com/sfox1975/Udacity-DAND-Project-6/blob/master/Hand_Sketch.JPG)
+![Hand Sketch](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/20170321_030253.jpg)
 
 ### Coded Sketch - Take 1
 
