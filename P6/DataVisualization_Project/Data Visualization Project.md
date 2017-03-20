@@ -17,9 +17,14 @@ Since this was a time series data, I opted for line and bar graph. I decided to 
 
 ### Hand Sketch
 The initial design was as follows:
-![Hand Sketch](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/20170321_030253.jpg)
+![Hand Sketch](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/data/initial.jpg)
+
+This was my intial thought on the visualization. I would like to compare Number of active users as a bar graph and compare it with Number of Internet users worldwide (as line plot). My intention was to see if there are any unseen relevance between these.
 
 ### Coded Sketch - Take 1
+My first sketch was to get any insights from Facebook's retention and Internet user's growth world wide.
+![Take 1](https://bl.ocks.org/ankitameht/raw/06563d6e65d34531afa78384b8ce4a4b/)
+
 
 ### Coded Sketch - Take 2
 
