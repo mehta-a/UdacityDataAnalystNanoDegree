@@ -16,3 +16,16 @@ by Ankita Mehta, Data Analyst Nanodegree
 
 #Resources 
 - list any sources you consulted to create your visualization
+
+https://newsroom.fb.com/news/
+https://newsroom.fb.com/company-info/
+https://en.wikipedia.org/wiki/List_of_Facebook_features
+https://www.statista.com/statistics/264810/number-of-monthly-active-facebook-users-worldwide/
+https://finance.yahoo.com/news/number-active-users-facebook-over-years-214600186--finance.html
+https://www.theguardian.com/news/datablog/2014/feb/04/facebook-in-numbers-statistics
+
+http://www.internetlivestats.com/internet-users/#definitions
+https://en.wikipedia.org/wiki/Facebook
+
+https://en.wikipedia.org/wiki/Timeline_of_social_media
+
