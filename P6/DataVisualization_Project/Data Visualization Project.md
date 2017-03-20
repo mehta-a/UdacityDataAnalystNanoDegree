@@ -23,7 +23,14 @@ This was my intial thought on the visualization. I would like to compare Number 
 
 ### Coded Sketch - Take 1
 My first sketch was to get any insights from Facebook's retention and Internet user's growth world wide.
-![Take 1](https://bl.ocks.org/ankitameht/raw/06563d6e65d34531afa78384b8ce4a4b/)
+![Take 1](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/Take1.png)
+
+This was my first attempt to make a plot using d3. I felt my inexperience with the language made the plot erroneous.
+
+Anyhow, the attempt was to plot the bars represeting Facebook's Active users. I tried to plot a line to show the growth of internet users worldwide. 
+
+
+(Details: https://bl.ocks.org/ankitameht/06563d6e65d34531afa78384b8ce4a4b)
 
 
 ### Coded Sketch - Take 2
