@@ -41,11 +41,18 @@ After one self-reflection, I feel my visualization doesnt communicate much. I do
 - I use scatter plot and line plot combined in order to parallelly show both growth in terms of users and revenue.
 - I decided to add few bubble highlights to point at major aqusitions and feature launches.
 - I used interactive features of dimple and added colors to make it look appealing.
-- I also include a facebook logo to add to user retention.
 
-![Take 1](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/Take2.png)
+![Take 2](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/Take2.png)
 
 (Details: http://bl.ocks.org/ankitameht/0d1a77731efa88f4cc3ce731903830cb)
+
+### Coded Sketch - Take 3
+- Since this was an interactive visualization, adding point labels did not made sense. I felt top bubbles are not self descriptive and hence I included to describe them in the header.
+- I also include a facebook logo to add to user retention.
+
+![Take 3](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P6/DataVisualization_Project/Take3.png)
+
+(Details: http://bl.ocks.org/ankitameht/498ebebc8d80befd1fafee29a7abedd1)
 
 ## Feedback
 
