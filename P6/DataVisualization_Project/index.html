@@ -1,101 +1,162 @@
 <!DOCTYPE html>
-<style>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
 
-.axis .domain {
-  display: none;
-}
+  <style>
+    h2 {
+      text-align: left;
+      font-family: sans-serif;
+    }
+     h3 {
+      text-align: left;
+      font-family: sans-serif;
+      font-size: 14px;
+      font-style: normal;
+    }
+  </style>
 
-</style>
-<svg width="960" height="500"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
+  <script type="text/javascript">
+    function draw(data) {
+    /*
+      D3.js setup code
+    */
+        "use strict";
+        var margin = 75,
+            width = 1400 - margin,
+            height = 600 - margin;
+        d3.select("body")
+          .append("h2")
+          .text("Facebook Growth, 2008 - 2016");
+        d3.select("body")
+          .append("h3")
+          .text("Facebook grew from 100M users to over 1860M users during this period.");
+        d3.select("body")
+          .append("h3")
+          .text("A look at the timeline reveals how multiple acquisitions and feature launches fueled this growth.");
+        d3.select("body")
+          .append("h3")
+          .text("Top bubbles represent major facbook launches and acquisitions.");
+        var svg = d3.select("body")
+          .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+          .append('g')
+              .attr('class','chart');
+    /*
+      Dimple.js Chart construction code
+    */
+        var myChart = new dimple.chart(svg, data);
+        var x = myChart.addCategoryAxis("x", "Year");
+        var y1 = myChart.addMeasureAxis("y", "FacebookUsers(in Millions)");
+        var y2 = myChart.addMeasureAxis("y", "Sales($M)");
+        x.fontSize = '14px';
+        y1.fontSize = '14px';
+        y2.fontSize = '14px';
+        var s1 = myChart.addSeries("Year", dimple.plot.bar,[x,y1]);
+        var s2 = myChart.addSeries("Year", dimple.plot.scatter, [x,y2]);
+        var s3 = myChart.addSeries(null, dimple.plot.line, [x,y2]);
 
-var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    /*
+      Create a 3rd y-axis (hidden)
+    */
+        var y3 = myChart.addPctAxis("y", "Dummy");
+        y3.hidden = true;
+    /*
+      Add 5 (s4 - s8) key Amazon corporate events as points on the chart
+    */
+        var s4 = myChart.addSeries(["Event","Feature Launch"],dimple.plot.bubble, [x, y3]);
+        s4.data = [{
+            "Event": "Facebook Launches the Like button",
+            "Dummy": 1,
+            "Year": "2009"
+        }];
+        s4.getTooltipText = function (e) {
+                return [
+                    e.aggField[0]
+                ];
+        };
+        var s5 = myChart.addSeries("Event",dimple.plot.bubble, [x, y3]);
+        s5.data = [{
+            "Event": "Facebook Launches the Groups",
+            "Dummy": 1,
+            "Year": "2010"
+        }];
+        s5.getTooltipText = function (e) {
+                return [
+                    e.aggField[0]
+                ];
+        };
+        var s6 = myChart.addSeries("Event",dimple.plot.bubble, [x, y3]);
+        s6.data = [{
+            "Event": "Facebook Launches Video Calling, Timeline",
+            "Dummy": 1,
+            "Year": "2011"
+        }];
+        s6.getTooltipText = function (e) {
+                return [
+                    e.aggField[0]
+                ];
+        };
+        var s7 = myChart.addSeries("Event",dimple.plot.bubble, [x, y3]);
+        s7.data = [{
+            "Event": "Facebook Announced acquisition of Instagram",
+            "Dummy": 1,
+            "Year": "2012"
+        }];
+        s7.getTooltipText = function (e) {
+                return [
+                    e.aggField[0]
+                ];
+        };
+        var s8 = myChart.addSeries("Event",dimple.plot.bubble, [x, y3]);
+        s8.data = [{
+            "Event": "Facebook Announced acquisition of Whatsapp, Occulus",
+            "Dummy": 1,
+            "Year": "2014"
+        }];
+        s8.getTooltipText = function (e) {
+                return [
+                    e.aggField[0]
+                ];
+        };
+        myChart.draw();
+    /*
+      Add formatting changes to improve contrast, readability and style
+    */
+        svg.selectAll(".dimple-line")
+          .style("stroke-dasharray", "2");
+        svg.selectAll(".dimple-bubble")
+          .style("r", "7")
+          .style("fill","#F58B4C")
+          .style("stroke","black");
+        svg.selectAll(".dimple-series-1")
+          .style("r", "5")
+          .style("fill","black")
+          .style("stroke","black");
+        svg.selectAll(".dimple-legend-key.dimple-corporate-events")
+          .style("fill","#F58B4C")
+          .style("stroke","black");
 
-var x = d3.scaleBand()
-    .rangeRound([0, width])
-    .paddingInner(0.05)
-    .align(0.1);
+        x.titleShape.text("Year");
+        y1.titleShape.text("Facebook Active Users (in Millions)");
+        y2.titleShape.text("Facebook Revenue (in $Millions)");
 
-var y = d3.scaleLinear()
-    .rangeRound([height, 0]);
 
-var z = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-d3.csv("data/facebook.csv", function(d, i, columns) {
-  for (i = 1, t = 0; i <(columns.length); ++i) 
-  t += d[columns[i]] = +d[columns[i]];
-  d.total = t;
-  return d;
-}, function(error, data) {
-  if (error) throw error;
-
-  //debugger;
-
-  var keys = data.columns.slice(1);
-
-  data.sort(function(a, b) { return b.total - a.total; });
-  x.domain(data.map(function(d) { return d.Year; }));
-  y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
-  z.domain(keys);
-
-  //debugger;
-
-  g.append("g")
-    .selectAll("g")
-    .data(d3.stack().keys(keys)(data))
-    .enter().append("g")
-      .attr("fill", function(d) { return z(d.key); })
-    .selectAll("rect")
-    .data(function(d) { return d; })
-    .enter().append("rect")
-      .attr("x", function(d) { return x(d.data.Year); })
-      .attr("y", function(d) { return y(d[1]); })
-      .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-      .attr("width", x.bandwidth());
-
-  g.append("g")
-      .attr("class", "axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-  g.append("g")
-      .attr("class", "axis")
-      .call(d3.axisLeft(y).ticks(null, "s"))
-    .append("text")
-      .attr("x", 2)
-      .attr("y", y(y.ticks().pop()) + 0.5)
-      .attr("dy", "0.32em")
-      .attr("fill", "#000")
-      .attr("font-weight", "bold")
-      .attr("text-anchor", "start")
-      .text("Population");
-
-  var legend = g.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
-      .attr("text-anchor", "end")
-    .selectAll("g")
-    .data(keys.slice().reverse())
-    .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-  legend.append("rect")
-      .attr("x", width - 19)
-      .attr("width", 19)
-      .attr("height", 19)
-      .attr("fill", z);
-
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9.5)
-      .attr("dy", "0.32em")
-      .text(function(d) { return d; });
-});
-
-</script>
+        
+    };
+  </script>
+</head>
+<body>
+  <img src="data/facebook.png">
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the TSV file
+    and pass the contents of it to the draw function
+    */
+  d3.csv("data/facebook.csv", draw);
+  </script>
+</body>
+</html>
