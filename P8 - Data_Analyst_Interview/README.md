@@ -13,26 +13,23 @@ Ans:
 
 > Follow-up question: If you were given an identical box of chocolates and again eat four pieces in a row, what is the probability that exactly two contain coconut filling?
 
-Ans: 
+Ans: The solution are provided as I would perform on a white-board:
 
+![Solution for Q2 part 1](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P8%20-%20Data_Analyst_Interview/Q2_1.jpg)
+
+P(case 1) = 0.0714
+
+Solution to the follow up answers:
+
+![Solution for Q2 part 2](https://github.com/ankitameht/UdacityDataAnalystNanoDegree/blob/master/P8%20-%20Data_Analyst_Interview/Q2_2.jpg)
+
+P(case 2) = 0.4285
 
 
 ##### 3. SQL Programming
 > Q3: Given the table users:
 
 >      Table "users"
-
-| Column      | Type      |
-|-------------|-----------|
-| id          | integer   |
-| username    | character |
-| email       | character |
-| city        | character |
-| state       | character |
-| zip         | integer   |
-| active      | boolean   |
-
->     Table "users"
 
 | Column      | Type      |
 |-------------|-----------|
@@ -56,15 +53,37 @@ Ans:
 
 Ans:
 
+```
+SELECT state, COUNT(active) as "num_active_users"
+FROM users
+GROUP BY state
+HAVING active = TRUE
+ORDER BY COUNT(active) DESC
+LIMIT 5
+```
 
 ##### 4. Data Structures and Algorithms Programming
 
 > Q4: Define a function first_unique that takes a string as input and returns the first non-repeated (unique) character in the input string. If there are no unique characters return None. Note: Your code should be in Python.
 
+Ans:
+
 ```
 def first_unique(string):
-	 # Your code here
-	 return unique_char
+	 string = string.lower()
+	 unique_char = {}
+	 for c in string:
+	 	if c not in unique_char.keys():
+	 		unique_char[c] = 1
+	 	else:
+	 		unique_char[c] += 1
+	 l = list(unique_char.values())
+	 if 1 not in l:
+	 	return "None"
+	 for c in string:
+	 	if(unique_char[c]==1):
+	 		return c
+	 return "None"
 
 > first_unique('aabbcdd123')
 c
@@ -76,14 +95,13 @@ a
 None
 ```
 
-Ans:
-
 
 ##### 5. Data Analysis
 
 > Q5: What are underfitting and overfitting in the context of Machine Learning? How might you balance them?
 
-Ans:
+Ans: 
+
 
 ##### 6. Future Plan
 > Q6: If you were to start your data analyst position today, what would be your goals a year from now?
