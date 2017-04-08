@@ -5,8 +5,13 @@ by [Ankita Mehta](https://profiles.udacity.com/p/3853148787), as part of Udacity
 ##### 1. Data Project Experience
 > Describe a data project you worked on recently.
 
-Ans:
+Ans: Recently I worked on project to use a data-set collected from homes in suburbs of Boston, Massachusetts (originated from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Housing)) and build a model which could be used to make the predictions of monetory values of houses. This project could be used by real estate agents who would require such information on a daily basis. The dataset had 506 enteries (data points) and 14 features such as average number of rooms in the neighbourhood, percentage of house owners, etc.
 
+I used python's `sklearn` library and `sklearn.tree.DecisionTreeRegressor` model, also various machine learning techniques to perform this task. Intitally to build the model and perform evaluation on the data-set, it was divided into 80% training and 20% testing using `train_test_split ` from `sklearn.cross_validation`. 
+
+Before building the actual model, I visualized the data using `visuals. ModelLearning` function in order to check the learning and testing performances on various subsets of training data. This was very interesting as I observed that the training and test score were very high, which made me learn that may the model suffers from high variance (or overfitting). I later performed grid search (with k-fold cross validation) technique to optimise the hyperparameters of learning algorithm. Finally after choosing the optimal `max_depth` of the tree, the model was built and predictions were performed. 
+
+The overall model had a R^2 value as 0.77, i.e. the model had 77% accuracy.
 
 ##### 2. Probability
 > Q2: You are given a ten piece box of chocolate truffles. You know based on the label that six of the pieces have an orange cream filling and four of the pieces have a coconut filling. If you were to eat four pieces in a row, what is the probability that the first two pieces you eat have an orange cream filling and the last two have a coconut filling?
@@ -100,12 +105,22 @@ None
 
 > Q5: What are underfitting and overfitting in the context of Machine Learning? How might you balance them?
 
-Ans: 
+Ans: Overfitting is when a model is built that describes random error or noise instead of the underlying relationship. It performs extereemly well on a train data, however, it fails to generalise the relationship between features and target value. 
 
+Underfitting occurs when the model that we are using is not able to capture the underlying trend of the data. For example, when fitting a linear model to non-linear data. 
+
+Both overfitting and underfitting lead to poor predictions on new (test) data sets.
 
 ##### 6. Future Plan
 > Q6: If you were to start your data analyst position today, what would be your goals a year from now?
 
-Ans:
+Ans: 
+I would like to apply to [Data Analyst Position at Microsoft](https://www.linkedin.com/jobs/view/258854419/)
 
+Within one year, my goal are:
 
+1. Understand nuts and bolts of every single relevant business tools relatedt big data and also Outlook services, especially for WA, US.
+
+2. Code fluently in Python to build new innovative ideas and make informed decisions for Microsoft. 
+
+3. Develop new big data (large repo of mails and other documents) management product specifically for Outlook users. E.g an automate tool to calculate A/B testing result & experiement for a new features in Outlook.
