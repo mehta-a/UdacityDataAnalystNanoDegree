@@ -11,7 +11,7 @@ I used python's `sklearn` library and `sklearn.tree.DecisionTreeRegressor` model
 
 Before building the actual model, I visualized the data using `visuals. ModelLearning` function in order to check the learning and testing performances on various subsets of training data. This was very interesting as I observed that the training and test score were very high, which made me learn that may the model suffers from high variance (or overfitting). I later performed grid search (with k-fold cross validation) technique to optimise the hyperparameters of learning algorithm. Finally after choosing the optimal `max_depth` of the tree, the model was built and predictions were performed. 
 
-The overall model had a R^2 value as 0.77, i.e. the model had 77% accuracy.
+The overall model had a R^2 value as 0.77.
 
 ##### 2. Probability
 > Q2: You are given a ten piece box of chocolate truffles. You know based on the label that six of the pieces have an orange cream filling and four of the pieces have a coconut filling. If you were to eat four pieces in a row, what is the probability that the first two pieces you eat have an orange cream filling and the last two have a coconut filling?
@@ -75,19 +75,29 @@ Ans:
 
 ```
 def first_unique(string):
-	 string = string.lower()
+	 # Refer (1) below
+	 
+	 # Make a dictionary to store unique characters
 	 unique_char = {}
+	 
+	 # Scan each character and store its count in the string
 	 for c in string:
 	 	if c not in unique_char.keys():
 	 		unique_char[c] = 1
 	 	else:
 	 		unique_char[c] += 1
 	 l = list(unique_char.values())
-	 if 1 not in l:
-	 	return "None"
-	 for c in string:
-	 	if(unique_char[c]==1):
+	 
+	 # Check in the values of dictionary if any character has a count 1 (unique)
+	 if 1 not in l:			# Return if no character is unique
+	 	return "None" 
+	 	
+	 # Scan the string again to get the first character which is unique 
+	 for c in string:		
+	 	 	if(unique_char[c]==1):
 	 		return c
+	 
+	 # Finally return if function reaches here (ideally it should not). 
 	 return "None"
 
 > first_unique('aabbcdd123')
@@ -98,6 +108,8 @@ a
 
 > first_unique('112233')
 None
+
+# (1) If the result is not case sensitive then one may add here: string = string.lower()
 ```
 
 
@@ -111,6 +123,15 @@ Underfitting occurs when the model that we are using is not able to capture the 
 
 Both overfitting and underfitting lead to poor predictions on new (test) data sets.
 
+In order to balance overfitting, we can do the following:
+
+1. We can use a simpler model (tune with fewer parameters and avoid adding those which contribute little to the results). 
+
+2. Another method could be using techniques like cross validation, i.e. splitting the data into 60-40 or 80-20 ratio and running sample trials and then validate the results, or
+
+3. Use regularization method where your penalize certain sources of overfitting for example LASSO regularization, where you penalize your model if the sum of the norms of the slopes get too high.
+
+
 ##### 6. Future Plan
 > Q6: If you were to start your data analyst position today, what would be your goals a year from now?
 
@@ -123,4 +144,8 @@ Within one year, my goal are:
 
 2. Code fluently in Python to build new innovative ideas and make informed decisions for Microsoft. 
 
-3. Develop new big data (large repo of mails and other documents) management product specifically for Outlook users. E.g an automate tool to calculate A/B testing result & experiement for a new features in Outlook.
+One year from now, my goals would be:
+
+1. Develop new big data (large repo of mails and other documents) management product specifically for Outlook fulfilling its tagline "Organise your inbox. Simplify your life." for its users. E.g an automate tool to calculate A/B testing result & experiement for a new features in Outlook.
+
+2. Make my way towards the Microsoft's mission that is to empower every person and every organization on the planet to achieve more. I wish to contribute by providing quick turnaround data analysis (as the first thing) which will generate insights to help guide global Microsoft's decisions and executions.
