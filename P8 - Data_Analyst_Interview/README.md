@@ -119,7 +119,7 @@ I would like to apply to [Data Analyst Position at Microsoft](https://www.linked
 
 Within one year, my goal are:
 
-1. Understand nuts and bolts of every single relevant business tools relatedt big data and also Outlook services, especially for WA, US.
+1. Understand nuts and bolts of every single relevant business tools related to big data and also Outlook services, especially for the ones implemented and used at WA, US.
 
 2. Code fluently in Python to build new innovative ideas and make informed decisions for Microsoft. 
 
