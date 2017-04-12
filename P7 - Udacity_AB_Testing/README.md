@@ -71,33 +71,155 @@ Samples needed: 27,413 (chosen)
 
 Therefore, pageview/group = 27413/0.08 = 342662.5
 Total pageview = 342662.5*2 = 685325
-*Note1 : only 0.08 pageview leads to click.
-*Note2: double pageview because we need total pageview for both experiment & control group
+Note:
+- only 0.08 pageview leads to click.
+- double pageview because we need total pageview for both experiment & control group
 ```
 
 #####Duration vs. Exposure
 > Indicate what fraction of traffic you would divert to this experiment and, given this, how many days you would need to run the experiment. (These should be the answers from the "Choosing Duration and Exposure" quiz.)
 
-Give your reasoning for the fraction you chose to divert. How risky do you think this experiment would be for Udacity?
+With daily traffic of 40000, I'd direct 80% of my traffic (32000) to the experiment, which means it would take us approximately 22 days (685325/32000 = 22) for the experiment. 
 
-##Experiment Analysis
+>Give your reasoning for the fraction you chose to divert. How risky do you think this experiment would be for Udacity?
+
+The experiment should not affect whole operation of existing paying customers as well as highly motivated students (I'd suspect comprised the majority of the net conversion) and also would not affect Udacity content. Therefore, the whole experiment would not be considered as highly risky. However, I'd not direct all traffic to experiment so as to prevent small bugs in the process.
+
+##Experiment Analysis ([data](https://docs.google.com/spreadsheets/d/1Mu5u9GrybDdska-ljPXyBjTpdZIUev_6i7t4LRDfXM8/edit#gid=0))
 ####Sanity Checks
-For each of your invariant metrics, give the 95% confidence interval for the value you expect to observe, the actual observed value, and whether the metric passes your sanity check. (These should be the answers from the "Sanity Checks" quiz.)
+> For each of your invariant metrics, give the 95% confidence interval for the value you expect to observe, the actual observed value, and whether the metric passes your sanity check. (These should be the answers from the "Sanity Checks" quiz.)
 
-For any sanity check that did not pass, explain your best guess as to what went wrong based on the day-by-day data. Do not proceed to the rest of the analysis unless all sanity checks pass.
++ Number of cookies:
 
+ ```
+PageViews (Control Group): 345543
+PageViews (Experiment Group): 344660 
+Total PageViews : 690203
+Probability of Cookie in control or experiment group: 0.5
+SE = SQRT(0.5*(1-0.5)*(1/345543+1/344660) = 0.0006018
+Margin of error (m) = SE * 1.96 = 0.0011796
+Confidence Interval = [0.5-m,0.5+m] = [0.4988,0.5012]
+Observed value  = 344660/690203 = 0.5006
+```
+
++ Number of clicks: 
+
+ ```
+PageViews (Control Group): 28378
+PageViews (Experiment Group): 28325
+Total PageViews : 56703
+Probability of Cookie in control or experiment group: 0.5
+SE = SQRT(0.5*(1-0.5)*(1/28378+1/28325) = 0.0021
+Margin of error (m) = SE * 1.96 = 0.0041
+Confidence Interval = [0.5-m,0.5+m] = [0.4959,0.5041]
+Observed value  = 28378/56703 = 0.50046
+```
+
++ Results:
+
+ ```
+Number of cookies: [0.4988,0.5012]; observed .5006; PASS Sanity Check
+Number of clicks : [0.4959,0.5041]; observed .50046; PASS Sanity Check
+```
+
+> For any sanity check that did not pass, explain your best guess as to what went wrong based on the day-by-day data. Do not proceed to the rest of the analysis unless all sanity checks pass.
+
+	Both the Sanity check passed.
+	
 ####Result Analysis
 #####Effect Size Tests
-For each of your evaluation metrics, give a 95% confidence interval around the difference between the experiment and control groups. Indicate whether each metric is statistically and practically significant. (These should be the answers from the "Effect Size Tests" quiz.)
+>For each of your evaluation metrics, give a 95% confidence interval around the difference between the experiment and control groups. Indicate whether each metric is statistically and practically significant. (These should be the answers from the "Effect Size Tests" quiz.)
+
+Gross Conversion:
+
+|               | Control Group | Experiment |
+| ------------- | ------------- | ---------- |
+| Clicks        | 17293         | 17260      |
+| Enrolment     | 3785          | 3423       |
+| Gross Conversion| 0.2188746892 | 0.1983198146 |
+```
+SE = 0.004371675385
+m = SE * 1.96 = 0.00856848375
+Pooled Probability = 0.2086
+D hat = -0.02055
+Confidence Interval = [-0.0291,-0.0120]
+
+```
+Result:
+
+```
+Gross conversion CI: [-.0291, -.0120]
+- statistically significant (CI doesn't contain zero)
+- practically significant (CI doesn't contain d_min value)
+```
+
+|               | Control Group | Experiment |
+| ------------- | ------------- | ---------- |
+| Clicks        | 17293 		  | 17260      |
+| Enrolment     | 2033  		  | 1945       |
+| Net Conversion| 0.1175620193  | 0.1126882966 |
+
+```
+SE = 0.003434133513
+m = SE * 1.96 = 0.0067
+Pooled Probability = 0.2086
+D hat = -0.0049
+Confidence Interval = [-0.0116,-0.0019]
+```
+Result:
+
+```
+Net conversion CI: (-0.0116, 0.0019)
+- NOT statistically significant (CI contains zero)
+- NOT practically significant (CI contain d_min = +/- 0.0075)
+```
 
 #####Sign Tests
-For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.)
+> For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.)
+
+Gross Conversion:
+
+```
+Number of success: 4
+Number of trials: 23
+Probability: 0.5
+Two-tailed p-value : 0.0026
+```
+
++ p-value = 0.0026 < alpha level = 0.025. 
++ Therefore, we agree with the initial hypothesis, that the data is statistically and practically significant.
+
+
+Net Conversion:
+
+```
+Number of success: 10
+Number of trials: 23
+Probability: 0.5
+Two-tailed p-value : 0.6776
+```
++ p-value = 0.6776 > alpha level = 0.025. 
++ Therefore, we agree with the initial hypothesis, that the net conversion CI is both statistically and practically insignificant.
 
 #####Summary
-State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose.
+> State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose.
+
+Bonferroni correction was not used because the metrics in the test has high correlation (high variance) and the Bonferroni correction will be too conservative to it. I completely comprehend the importance to correct if a test is launched and the metrics shows a significant difference, because it's more liely that one of multiple metrics will be falsely positive as the number of metrics increases. However, we would only launch if all evaluation metrics must show a significant change. In that case, there would be no need to use Bonferroni correction. In other words, correction is applied if we are using OR on all metrics, but not if we are testing for AND of all metrics.
 
 ##Recommendation
-Make a recommendation and briefly describe your reasoning.
+> Make a recommendation and briefly describe your reasoning.
+
+I would recommend not to launch the experiment. The result of Gross Conversion showed statistically and practically significant changes after the pop-up message. This means that only those who are likely to commit more than 5 hours per week enroll the classes and they are more likely to make the first payments; this will reduce the costs of having those who are only taking free courses without making any payment. However, Net Conversion don't show statistically or practiclly significant changes after the test. This means that showing pop-up message to users before they enroll the classes don't affect the number of users who make their first payments after the free trial. Furthermore, the confidence interval of the net conversion includes the negative of the practical significance boundary which suggests the risk of hurting the Udacity's businiess.
 
 ##Follow-Up Experiment
-Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices.
+> Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices.
+
+I believe that one of the main reasons why students cancel early in the course is due to the uncertainty of getting jobs after attaining the degree. Only if they have some guarantees of getting jobs, they would definately continue enrolling the courses. Unfortunately the statistics of students of getting jobs after the course is difficult to measure because there are not enough amount of data and it takes too long to gather such data. However, Udacity can give students some inspirations by showing some clips of students who enjoy taking the Nanodegree. For example, if users complete checkout of the Data Analyst course, they will see some clips of students who enjoy taking Data Analyst course. Clips can show students who don't have any experience in computer science or students who are just trying to learn more about the certain area of studies. In current Data Anayst Nanodegree, there is no such clip specific to data analyst nanodegree when users complete checkout. I believe that showing the clips can give some courage and inspirations to those who are considering to start the courses and it might increase a chance of reducing the number of students who cancel early in the course.
+
+Null Hypothesis: Showing a clip of enrolled students when users complete checkout will not increase the net conversion siginificantly.
+Alternate Hypothesis: Showing a clip of enrolled students when users complete checkout will increase the net conversion by a practically siginificantl amount.
+Clips will be assigned to users randomly by dividing users into two groups: control and experiment groups. In control group, everything stays the same and no clip will be shown in the course overview page. In experiment group, users will see clips when they visit the course overview page.
+
+Unit of Diversion: User-id is a good for a unit of diversion because users will be assigned with user-id once they decide to enroll the course after they watch the clips.
+Invariant Metric: I can use an invariant metric same as the unit of diversion. The number of user-ids will be a good invariant metric because the value won't be affected by the test because users see the clips after they complete checkout.
+Evaluation Metric: Retention will be a good evaluation metric because this value tells us the ratio of the number of users who make first payments to the number of users who complete checkout "start free trial" button. We want to see statistically and practically siginificant increases in experiment group.
