@@ -45,16 +45,38 @@ Following is the standard deviation for the following:
 + **Retention**:
 	+ (Similar to above) SE = SQRT((0.53*(1-0.53)/660) * SQRT(40000/5000))) = 0.5494
 + **Net Conversion**:
-	+  
-
+	+ For 3200 clicks & 40000 pageviews: SE = SQRT(0.1093125*(1-0.1093125)/3200) = 0.00551.
+	+ For 50000 pageviews: SE = 0.00715 * SQRT(40000/5000) = 0.0156 
+	
 > For each of your evaluation metrics, indicate whether you think the analytic estimate would be comparable to the the empirical variability, or whether you expect them to be different (in which case it might be worth doing an empirical estimate if there is time). Briefly give your reasoning in each case.
+
+Gross Conversion and Net Conversion use the number of cookies as their denominators. This is a unit of diversion and it is same as a unit of analysis; thus, analytical estimate is comparable to the empirical variability.
 
 ####Sizing
 #####Number of Samples vs. Power
-Indicate whether you will use the Bonferroni correction during your analysis phase, and give the number of pageviews you will need to power you experiment appropriately. (These should be the answers from the "Calculating Number of Pageviews" quiz.)
+>Indicate whether you will use the Bonferroni correction during your analysis phase, and give the number of pageviews you will need to power you experiment appropriately. (These should be the answers from the "Calculating Number of Pageviews" quiz.)
+
+I did not use Bonferroni Correction during my analysis phase. The metrics in the test have high correlation (covariant) and the Bonferroni correction will be too conservative to it.
+
+I realised that the amount of pageview for retention as evaluation metrics would need almost half-a-year for testing even if we direct 50% of traffic to that experiment, which is completely not a economic feasible timeline for a A/B Testing result. Therefore, I have iterate my evaluation metrics and use Gross Conversion and Net Conversion as evaluation metrics. Using [Evan Miller](http://www.evanmiller.org/ab-testing/sample-size.html), the result can be referred below:
+
+```
+Probability of enrolling, given click:
+20.625% base conversion rate, 1% min d.
+Samples needed: 25,835
+
+Probability of payment, given click:
+10.93125% base conversion rate, 0.75% min d.
+Samples needed: 27,413 (chosen)
+
+Therefore, pageview/group = 27413/0.08 = 342662.5
+Total pageview = 342662.5*2 = 685325
+*Note1 : only 0.08 pageview leads to click.
+*Note2: double pageview because we need total pageview for both experiment & control group
+```
 
 #####Duration vs. Exposure
-Indicate what fraction of traffic you would divert to this experiment and, given this, how many days you would need to run the experiment. (These should be the answers from the "Choosing Duration and Exposure" quiz.)
+> Indicate what fraction of traffic you would divert to this experiment and, given this, how many days you would need to run the experiment. (These should be the answers from the "Choosing Duration and Exposure" quiz.)
 
 Give your reasoning for the fraction you chose to divert. How risky do you think this experiment would be for Udacity?
 

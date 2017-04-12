@@ -6,10 +6,18 @@ by [Ankita Mehta](https://profiles.udacity.com/p/3853148787), as part of Udacity
 
 Ans: 
 
+```
+
+
+```
 
 > Q2: Given a string a, find the longest palindromic substring contained in a. Your function definition should look like question2(a), and return a string.
 
 Ans:
+
+```
+
+```
 
 > Q3: Given an undirected graph G, find the minimum spanning tree within G. A minimum spanning tree connects all vertices in a graph with the smallest possible total weight of edges. Your function should take in and return an adjacency list structured like this:
 
