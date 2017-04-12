@@ -83,7 +83,10 @@ With daily traffic of 40000, I'd direct 80% of my traffic (32000) to the experim
 
 >Give your reasoning for the fraction you chose to divert. How risky do you think this experiment would be for Udacity?
 
+Only 80% will be affected and the change due to the experiment is small, so it won't cause toomuch trouble in the overall business. The overall experiment is not very risky since there are nosensitive information we use in this experiment. Although users have to provide their credit cardnumbers when they enroll the course, these information are not part of the experiment.
+
 The experiment should not affect whole operation of existing paying customers as well as highly motivated students (I'd suspect comprised the majority of the net conversion) and also would not affect Udacity content. Therefore, the whole experiment would not be considered as highly risky. However, I'd not direct all traffic to experiment so as to prevent small bugs in the process.
+Duration is 22 days that is less than a month which is what the client wants. So it is good amount ofduration.
 
 ##Experiment Analysis ([data](https://docs.google.com/spreadsheets/d/1Mu5u9GrybDdska-ljPXyBjTpdZIUev_6i7t4LRDfXM8/edit#gid=0))
 ####Sanity Checks
@@ -164,7 +167,7 @@ SE = 0.003434133513
 m = SE * 1.96 = 0.0067
 Pooled Probability = 0.2086
 D hat = -0.0049
-Confidence Interval = [-0.0116,-0.0019]
+Confidence Interval = [-0.0116, 0.0019]
 ```
 Result:
 
@@ -214,12 +217,22 @@ I would recommend not to launch the experiment. The result of Gross Conversion s
 ##Follow-Up Experiment
 > Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices.
 
-I believe that one of the main reasons why students cancel early in the course is due to the uncertainty of getting jobs after attaining the degree. Only if they have some guarantees of getting jobs, they would definately continue enrolling the courses. Unfortunately the statistics of students of getting jobs after the course is difficult to measure because there are not enough amount of data and it takes too long to gather such data. However, Udacity can give students some inspirations by showing some clips of students who enjoy taking the Nanodegree. For example, if users complete checkout of the Data Analyst course, they will see some clips of students who enjoy taking Data Analyst course. Clips can show students who don't have any experience in computer science or students who are just trying to learn more about the certain area of studies. In current Data Anayst Nanodegree, there is no such clip specific to data analyst nanodegree when users complete checkout. I believe that showing the clips can give some courage and inspirations to those who are considering to start the courses and it might increase a chance of reducing the number of students who cancel early in the course.
+I believe that one of the main reasons why students choose not to opt for course or cancel early in the course is due to the uncertainty of getting jobs after attaining the degree. Only if they have some guarantees of getting jobs, they would definitely continue enrolling the courses. 
 
-Null Hypothesis: Showing a clip of enrolled students when users complete checkout will not increase the net conversion siginificantly.
-Alternate Hypothesis: Showing a clip of enrolled students when users complete checkout will increase the net conversion by a practically siginificantl amount.
+Unfortunately the statistics of students of getting jobs after the course is difficult to measure because there isn't enough amount of data and it takes too long to gather such data. However, Udacity can give students some inspirations by showing some clips of students who enjoy taking the Nanodegree. 
+
+For example, once registered at udacity (free registration and general purpose for getting user-ids) and a user checks the course structure of Data Analyst Nanodegree (say), they will see some clips of students who enjoy taking Data Analyst course. Clips can show students who don't have any experience in computer science or students who are just trying to learn more about the certain area of studies. In current Data Anayst Nanodegree, there is no such thing specific to data analyst nanodegree in the course structure page. I believe that showing the clips can motivate and inspire those who are considering to start the courses and it might increase the chance of reducing the number of students who cancel early in the course.
+
+**Note**: This experiment could be first tested on a single nanodegree.
+
+**Null Hypothesis**: Showing a clip of enrolled students (or Udacity alumni) at the course structure page will not increase the net conversion siginificantly.
+
+**Alternate Hypothesis**: Showing a clip of enrolled students (or Udacity alumni) at the course structure page will increase the net conversion by a practically siginificant amount.
+
 Clips will be assigned to users randomly by dividing users into two groups: control and experiment groups. In control group, everything stays the same and no clip will be shown in the course overview page. In experiment group, users will see clips when they visit the course overview page.
 
-Unit of Diversion: User-id is a good for a unit of diversion because users will be assigned with user-id once they decide to enroll the course after they watch the clips.
-Invariant Metric: I can use an invariant metric same as the unit of diversion. The number of user-ids will be a good invariant metric because the value won't be affected by the test because users see the clips after they complete checkout.
-Evaluation Metric: Retention will be a good evaluation metric because this value tells us the ratio of the number of users who make first payments to the number of users who complete checkout "start free trial" button. We want to see statistically and practically siginificant increases in experiment group.
+**Unit of Diversion**: User-id is a good for a unit of diversion because users will be assigned with user-id once they decide to enroll the course after they watch the clips.
+
+**Invariant Metric**: I can use an invariant metric same as the unit of diversion. The number of user-ids will be a good invariant metric because the value won't be affected by the test because users see the clips as part of course structure.
+
+**Evaluation Metric**: Global Conversionn or Net Conversion would be good evaluation metrics because this value tells us the ratio of the number of users who enrolled for the course to the number of users who registered at udacity but did not enroll any course. We want to see statistically and practically siginificant increases in experiment group.
