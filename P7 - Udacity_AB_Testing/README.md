@@ -30,7 +30,9 @@ The goal of this project is to do the following:
 
 5. **Gross Conversion** (_Number of user-ids to complete checkout and enrol in the free trial divided by number of unique cookies to click "start free trail" button_): This is a good evaluation metrics (and so it cannot be a good invariant metric) since this is directly dependent on the effect of the experiment. Expected is that the value will be lower in the experiment group because some people who are not able to commit more than 5 hours per week won't enroll the classes. where as, in the control group, users won't see any pop-up message so they will enroll without any consideration of the number of hours they can commit per week.
 
-6. **Retention** (_Number of user-ids to remain enrolled past 14-day boundary (and thus make at least one payment) divided by the number of user-ids to complete checkout_): It is expected that fewer students enroll in the free trial in the experimental group, but possibly the number of paying students after 14 days to be unchanged or even increase. Thus this is a good evaluation metric rather than invariant metric.  However, I didn't choose  to use this as an evaluation metric for the test because it is redundant to Gross conversion and Net conversion.
+6. **Retention** (_Number of user-ids to remain enrolled past 14-day boundary (and thus make at least one payment) divided by the number of user-ids to complete checkout_): It is expected that fewer students enroll in the free trial in the experimental group, but possibly the number of paying students after 14 days to be unchanged or even increase. Thus this is a good evaluation metric rather than invariant metric.  However, I didn't choose  to use this as an evaluation metric for the test because it is redundant to Gross conversion and Net conversion; this value can be calculated using Retention and Net Conversion. 
+
+	Also it is not feasibile to run the experiment for longer duration. Consider for 4,741,212 page views and  40,000 page views per day, retention would be  = 4,741,212 page views / 40,000 page views per day = 119 days. This is a really long duration to run the experiment. Hence retention should be dropped as an evaluation metric.
 
 7. **Net Conversion** (_Number of user-ids to remain enrolled past 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click on the "start free trial" button_): This is a good evaluation metric. It would be great if this value increases after the test; however, due to the expected decrease in number of students enrolling the free trial, it is possible that net conversion might decrease after the test. However, since the majority of the experiment group are those who can commit 5 hours per week and they are more likely to make the first payments for the course. So we want this value not to decrease after the test.
 
@@ -85,8 +87,8 @@ With daily traffic of 40000, I'd direct 80% of my traffic (32000) to the experim
 
 Only 80% will be affected and the change due to the experiment is small, so it won't cause toomuch trouble in the overall business. The overall experiment is not very risky since there are nosensitive information we use in this experiment. Although users have to provide their credit cardnumbers when they enroll the course, these information are not part of the experiment.
 
-The experiment should not affect whole operation of existing paying customers as well as highly motivated students (I'd suspect comprised the majority of the net conversion) and also would not affect Udacity content. Therefore, the whole experiment would not be considered as highly risky. However, I'd not direct all traffic to experiment so as to prevent small bugs in the process.
-Duration is 22 days that is less than a month which is what the client wants. So it is good amount ofduration.
+The experiment should not affect whole operation of existing paying customers as well as highly motivated students (I'd suspect comprised the majority of the net conversion) and also would not affect Udacity content. Therefore, the whole experiment would not be considered as highly risky. However, I'd not direct all (100%) traffic to experiment. This is beacause due to the experiment Udacity will actively attempt to discourage certain students from signing up for a free trial, which could ultimately impact the company’s revenues. 
+So a reduced ratio of 0.8 (80% traffic) will lead to a duration of 22 days, that is less than a month (which is what the client wants). So it is good amount ofduration.
 
 ##Experiment Analysis ([data](https://docs.google.com/spreadsheets/d/1Mu5u9GrybDdska-ljPXyBjTpdZIUev_6i7t4LRDfXM8/edit#gid=0))
 ####Sanity Checks
@@ -118,16 +120,26 @@ Confidence Interval = [0.5-m,0.5+m] = [0.4959,0.5041]
 Observed value  = 28378/56703 = 0.50046
 ```
 
++ Click Through Probability
+
+	```
+PageViews (Control Group): 28378
+PageViews (Experiment Group): 28325
+Total PageViews : 56703Pooled Probability = 0.0821540908979SE = 0.000661060815639Margin of error (m) = 0.00129567919865Difference = 5.66270915869e-05Confidential interval CI = (-0.0012956791986518956, 0.0012956791986518956) = [-0.0013, 0.0013]
+Observed value = 0.0001
+```
+
 + Results:
 
  ```
 Number of cookies: [0.4988,0.5012]; observed .5006; PASS Sanity Check
 Number of clicks : [0.4959,0.5041]; observed .50046; PASS Sanity Check
+Clicks-through-probability : [-0.0013, 0.0013]; observed 0.0001; PASS Sanity Check
 ```
 
 > For any sanity check that did not pass, explain your best guess as to what went wrong based on the day-by-day data. Do not proceed to the rest of the analysis unless all sanity checks pass.
 
-	Both the Sanity check passed.
+	All Sanity checks passed.
 	
 ####Result Analysis
 #####Effect Size Tests
@@ -190,7 +202,7 @@ Two-tailed p-value : 0.0026
 ```
 
 + p-value = 0.0026 < alpha level = 0.025. 
-+ Therefore, we agree with the initial hypothesis, that the data is statistically and practically significant.
++ Therefore, we agree with the initial hypothesis, that the data is statistically significant.
 
 
 Net Conversion:
@@ -202,7 +214,7 @@ Probability: 0.5
 Two-tailed p-value : 0.6776
 ```
 + p-value = 0.6776 > alpha level = 0.025. 
-+ Therefore, we agree with the initial hypothesis, that the net conversion CI is both statistically and practically insignificant.
++ Therefore, we agree with the initial hypothesis, that the net conversion CI is both statistically insignificant.
 
 #####Summary
 > State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose.
@@ -221,7 +233,7 @@ I believe that one of the main reasons why students choose not to opt for course
 
 Unfortunately the statistics of students of getting jobs after the course is difficult to measure because there isn't enough amount of data and it takes too long to gather such data. However, Udacity can give students some inspirations by showing some clips of students who enjoy taking the Nanodegree. 
 
-For example, once registered at udacity (free registration and general purpose for getting user-ids) and a user checks the course structure of Data Analyst Nanodegree (say), they will see some clips of students who enjoy taking Data Analyst course. Clips can show students who don't have any experience in computer science or students who are just trying to learn more about the certain area of studies. In current Data Anayst Nanodegree, there is no such thing specific to data analyst nanodegree in the course structure page. I believe that showing the clips can motivate and inspire those who are considering to start the courses and it might increase the chance of reducing the number of students who cancel early in the course.
+For example, when a user checks the course structure of Data Analyst Nanodegree (say), they will see some clips of students who enjoy taking Data Analyst course. Clips can show students who don't have any experience in computer science or students who are just trying to learn more about the certain area of studies. In current Data Anayst Nanodegree, there is no such thing specific to data analyst nanodegree in the course structure page. I believe that showing the clips can motivate and inspire those who are considering to start the courses and it might increase the chance of reducing the number of students who cancel early in the course.
 
 **Note**: This experiment could be first tested on a single nanodegree.
 
@@ -231,8 +243,6 @@ For example, once registered at udacity (free registration and general purpose f
 
 Clips will be assigned to users randomly by dividing users into two groups: control and experiment groups. In control group, everything stays the same and no clip will be shown in the course overview page. In experiment group, users will see clips when they visit the course overview page.
 
-**Unit of Diversion**: User-id is a good for a unit of diversion because users will be assigned with user-id once they decide to enroll the course after they watch the clips.
+- **Invariant Metric**: The number of unique cookies, click (or watch clips) and click-through probability would be good invariant metric(s) because the value won't be affected by the test because users see the clips at the time they view the course structure.
 
-**Invariant Metric**: I can use an invariant metric same as the unit of diversion. The number of user-ids will be a good invariant metric because the value won't be affected by the test because users see the clips as part of course structure.
-
-**Evaluation Metric**: Global Conversionn or Net Conversion would be good evaluation metrics because this value tells us the ratio of the number of users who enrolled for the course to the number of users who registered at udacity but did not enroll any course. We want to see statistically and practically siginificant increases in experiment group.
+- **Evaluation Metric**: Retention will be a good evaluation metric because this value tells us the ratio of the number of users who make first payments to the number of users who view full course structure and then click on "start free trial" button. We want to see statistically siginificant increases in experiment group.
