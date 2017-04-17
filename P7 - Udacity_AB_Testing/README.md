@@ -243,6 +243,8 @@ For example, when a user checks the course structure of Data Analyst Nanodegree 
 
 Clips will be assigned to users randomly by dividing users into two groups: control and experiment groups. In control group, everything stays the same and no clip will be shown in the course overview page. In experiment group, users will see clips when they visit the course overview page.
 
+-**Unit of diversion** is unique number of cookies who watch the newly put clips. We are interested in the number of users who view full course structure, watch the clips and then click on "start free trial" button to enroll themselves. Thus those unique users who enroll after the browsing the course structure would be a good unit of divergence.
+
 - **Invariant Metric**: The number of unique cookies, click (or watch clips) and click-through probability would be good invariant metric(s) because the value won't be affected by the test because users see the clips at the time they view the course structure.
 
 - **Evaluation Metric**: Retention will be a good evaluation metric because this value tells us the ratio of the number of users who make first payments to the number of users who view full course structure and then click on "start free trial" button. We want to see statistically siginificant increases in experiment group.
